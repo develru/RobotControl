@@ -2,7 +2,7 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 
 ApplicationWindow {
-    title: qsTr("Hello World")
+    title: qsTr("Control Center")
     width: 640
     height: 480
 
@@ -17,7 +17,7 @@ ApplicationWindow {
     }
 
     Button {
-        text: qsTr("Hello World")
+        text: qsTr("Connect")
         anchors.centerIn: parent
     }
 }
