@@ -1,12 +1,20 @@
 import QtQuick 2.1
-import QtQuick.Controls 1.0
+import QtQuick.Controls 1.1
+import QtQuick.Layouts 1.1
 
 import com.develru.prc 1.0
 
 ApplicationWindow {
+
+    property int margin: 11
+    width: mainLayout.implicitWidth + 2 * margin
+    height: mainLayout.implicitHeight + 2 * margin
+    minimumWidth: mainLayout.Layout.minimumWidth + 2 * margin
+    minimumHeight: mainLayout.Layout.minimumHeight + 2 * margin
+
     title: qsTr("Control Center")
-    width: 640
-    height: 480
+    //    width: 640
+    //    height: 480
 
     PRCConnection {
         id: con
@@ -24,9 +32,28 @@ ApplicationWindow {
         }
     }
 
-    Button {
-        text: qsTr("Connect")
-        anchors.centerIn: parent
-        onClicked: con.connectToRobot();
+    RowLayout {
+        id: mainLayout
+        anchors.fill: parent
+        anchors.margins: margin
+        ColumnLayout {
+            Button {
+                text: qsTr("Connect")
+                Layout.fillWidth: true
+                onClicked: con.connectToRobot();
+            }
+            Button {
+                text: qsTr("Send")
+                Layout.fillWidth: true
+                onClicked: con.readData();
+            }
+        }
+
+        ColumnLayout {
+            TextArea {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
+        }
     }
 }
