@@ -25,13 +25,18 @@ signals:
 public slots:
     void setHost(QString arg);
     void setPort(int arg);
+    void connectToRobot();
+    void readData();
+    void displayError(QAbstractSocket::SocketError socketError);
+    void sessionOpened();
 
 private:
-    QTcpSocket *tcpSocket;
-    QNetworkSession *networkSession;
+    QTcpSocket *m_tcpSocket;
+    QNetworkSession *m_networkSession;
 
     QString m_host;
     int m_port;
+    qint16 blockSize;
 };
 
 #endif // PRCONNECTION_H
