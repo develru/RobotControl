@@ -6,7 +6,8 @@ PRConnection::PRConnection(QObject *parent) :
     QObject(parent),
     m_networkSession(0),
     m_host("localhost"),
-    m_port(9999)
+    m_port(9999),
+    m_sendEnable(false)
 {
     m_tcpSocket = new QTcpSocket(this);
 
@@ -38,6 +39,26 @@ PRConnection::PRConnection(QObject *parent) :
     }
 }
 
+QString PRConnection::host() const
+{
+    return m_host;
+}
+
+int PRConnection::port() const
+{
+    return m_port;
+}
+
+QString PRConnection::logMsg() const
+{
+    return m_logMsg;
+}
+
+bool PRConnection::sendEnable() const
+{
+    return m_sendEnable;
+}
+
 void PRConnection::setHost(QString arg)
 {
     if (m_host != arg) {
@@ -57,38 +78,90 @@ void PRConnection::setPort(int arg)
 void PRConnection::connectToRobot()
 {
     qDebug("Try to connect");
+    m_msgList.append("Try to connect");
+    setErrorMsg(m_msgList.join("\n"));
+
     blockSize = 0;
     m_tcpSocket->abort();
     m_tcpSocket->connectToHost(m_host, m_port);
-//    readData();
+    //    readData();
 }
 
 void PRConnection::readData()
 {
-    QDataStream in(m_tcpSocket);
-       in.setVersion(QDataStream::Qt_4_0);
+//    QDataStream in(m_tcpSocket);
+//    in.setVersion(QDataStream::Qt_4_0);
 
-       if (blockSize == 0) {
-           if (m_tcpSocket->bytesAvailable() < (int)sizeof(quint16))
-               return;
+//    if (blockSize == 0) {
+//        if (m_tcpSocket->bytesAvailable() < (int)sizeof(quint16))
+//            return;
 
-           in >> blockSize;
-       }
+//        in >> blockSize;
+//    }
 
-       if (m_tcpSocket->bytesAvailable() < blockSize)
-           return;
+//    if (m_tcpSocket->bytesAvailable() < blockSize)
+//        return;
 
-       QString nextFortune;
-       in >> nextFortune;
-       qDebug(nextFortune.toStdString().c_str());
+//    QString nextFortune;
+//    in >> nextFortune;
+//    qDebug(nextFortune.toStdString().c_str());
+
+    char buff[1024];
+    qint64 lineLength = m_tcpSocket->readLine(buff, sizeof(buff));
+    if (lineLength != -1) {
+        QString message = QString(buff);
+
+        if (message == "Connected") {
+            setSendEnable(true);
+        }
+
+        m_msgList.append(message);
+        setErrorMsg(m_msgList.join("\n"));
+    }
+
 }
 
 void PRConnection::displayError(QAbstractSocket::SocketError socketError)
 {
     qDebug("Error!");
+
+    switch (socketError) {
+    case QAbstractSocket::RemoteHostClosedError:
+        break;
+    case QAbstractSocket::HostNotFoundError:
+        m_msgList.append(tr("The host was not found. Please check the host name and port settings."));
+        break;
+    case QAbstractSocket::ConnectionRefusedError:
+        m_msgList.append(tr("The connection was refused by the peer. "
+                                    "Make sure the fortune server is running, "
+                                    "and check that the host name and port "
+                                    "settings are correct."));
+        break;
+    default:
+        m_msgList.append(tr("The following error occurred: %1.")
+                                 .arg(m_tcpSocket->errorString()));
+    }
+
+    setErrorMsg(m_msgList.join("\n"));
 }
 
 void PRConnection::sessionOpened()
 {
     qDebug("Seession is Opened");
+}
+
+void PRConnection::setErrorMsg(QString arg)
+{
+    if (m_logMsg != arg) {
+        m_logMsg = arg;
+        emit errorMsgChanged(arg);
+    }
+}
+
+void PRConnection::setSendEnable(bool arg)
+{
+    if (m_sendEnable != arg) {
+        m_sendEnable = arg;
+        emit sendEnableChanged(arg);
+    }
 }
