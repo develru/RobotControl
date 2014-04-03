@@ -44,8 +44,9 @@ ApplicationWindow {
             }
             Button {
                 text: qsTr("Send")
+                enabled: con.sendEnable
                 Layout.fillWidth: true
-                onClicked: con.readData();
+//                onClicked: con.readData();
             }
         }
 
@@ -53,6 +54,7 @@ ApplicationWindow {
             TextArea {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                text: con.logMsg
             }
         }
     }
