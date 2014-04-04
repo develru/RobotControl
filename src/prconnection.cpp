@@ -88,22 +88,22 @@ void PRConnection::connectToRobot()
 
 void PRConnection::readData()
 {
-//    QDataStream in(m_tcpSocket);
-//    in.setVersion(QDataStream::Qt_4_0);
+    //    QDataStream in(m_tcpSocket);
+    //    in.setVersion(QDataStream::Qt_4_0);
 
-//    if (blockSize == 0) {
-//        if (m_tcpSocket->bytesAvailable() < (int)sizeof(quint16))
-//            return;
+    //    if (blockSize == 0) {
+    //        if (m_tcpSocket->bytesAvailable() < (int)sizeof(quint16))
+    //            return;
 
-//        in >> blockSize;
-//    }
+    //        in >> blockSize;
+    //    }
 
-//    if (m_tcpSocket->bytesAvailable() < blockSize)
-//        return;
+    //    if (m_tcpSocket->bytesAvailable() < blockSize)
+    //        return;
 
-//    QString nextFortune;
-//    in >> nextFortune;
-//    qDebug(nextFortune.toStdString().c_str());
+    //    QString nextFortune;
+    //    in >> nextFortune;
+    //    qDebug(nextFortune.toStdString().c_str());
 
     char buff[1024];
     qint64 lineLength = m_tcpSocket->readLine(buff, sizeof(buff));
@@ -131,13 +131,13 @@ void PRConnection::displayError(QAbstractSocket::SocketError socketError)
         break;
     case QAbstractSocket::ConnectionRefusedError:
         setLogMsg(tr("The connection was refused by the peer. "
-                                    "Make sure the fortune server is running, "
-                                    "and check that the host name and port "
-                                    "settings are correct."));
+                     "Make sure the fortune server is running, "
+                     "and check that the host name and port "
+                     "settings are correct."));
         break;
     default:
         setLogMsg(tr("The following error occurred: %1.")
-                                 .arg(m_tcpSocket->errorString()));
+                  .arg(m_tcpSocket->errorString()));
     }
 }
 
@@ -165,17 +165,7 @@ void PRConnection::sendMessage(QString msg)
 {
     qDebug("Send");
 
-//    QByteArray block;
-//    QDataStream out(&block, QIODevice::WriteOnly);
-//    out.setVersion(QDataStream::Qt_4_0);
-//    out << (quint16)0;
-//    out << msg;
-//    out.device()->seek(0);
-//    out << (quint16)(block.size() - sizeof(quint16));
-
-//    const char *data = msg.toStdString().c_str();
     int count = m_tcpSocket->write(msg.toLatin1());
     m_tcpSocket->waitForBytesWritten(-1);
-//    if (m_tcpSocket->flush())
-        setLogMsg("Message: " + msg + "(sent " + QString(count) + " byte)");
+    setLogMsg("Message: " + msg + "(sent " + QString(count) + " byte)");
 }
