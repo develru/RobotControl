@@ -12,7 +12,7 @@ class PRConnection : public QObject
     Q_OBJECT
     Q_PROPERTY(QString host READ host WRITE setHost NOTIFY hostChanged)
     Q_PROPERTY(int port READ port WRITE setPort NOTIFY portChanged)
-    Q_PROPERTY(QString logMsg READ logMsg WRITE setErrorMsg NOTIFY errorMsgChanged)
+    Q_PROPERTY(QString logMsg READ logMsg WRITE setLogMsg NOTIFY logMsgChanged)
     Q_PROPERTY(bool sendEnable READ sendEnable WRITE setSendEnable NOTIFY sendEnableChanged)
 public:
     explicit PRConnection(QObject *parent = 0);
@@ -25,7 +25,7 @@ public:
 signals:
     void hostChanged(QString arg);
     void portChanged(int arg);
-    void errorMsgChanged(QString arg);
+    void logMsgChanged(QString arg);
 
     void sendEnableChanged(bool arg);
 
@@ -36,8 +36,9 @@ public slots:
     void readData();
     void displayError(QAbstractSocket::SocketError socketError);
     void sessionOpened();
-    void setErrorMsg(QString arg);
+    void setLogMsg(QString arg);
     void setSendEnable(bool arg);
+    void sendMessage(QString msg);
 
 private:
     QTcpSocket *m_tcpSocket;

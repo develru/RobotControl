@@ -78,8 +78,7 @@ void PRConnection::setPort(int arg)
 void PRConnection::connectToRobot()
 {
     qDebug("Try to connect");
-    m_msgList.append("Try to connect");
-    setErrorMsg(m_msgList.join("\n"));
+    setLogMsg("Try to connect");
 
     blockSize = 0;
     m_tcpSocket->abort();
@@ -115,8 +114,7 @@ void PRConnection::readData()
             setSendEnable(true);
         }
 
-        m_msgList.append(message);
-        setErrorMsg(m_msgList.join("\n"));
+        setLogMsg(message);
     }
 
 }
@@ -129,20 +127,18 @@ void PRConnection::displayError(QAbstractSocket::SocketError socketError)
     case QAbstractSocket::RemoteHostClosedError:
         break;
     case QAbstractSocket::HostNotFoundError:
-        m_msgList.append(tr("The host was not found. Please check the host name and port settings."));
+        setLogMsg(tr("The host was not found. Please check the host name and port settings."));
         break;
     case QAbstractSocket::ConnectionRefusedError:
-        m_msgList.append(tr("The connection was refused by the peer. "
+        setLogMsg(tr("The connection was refused by the peer. "
                                     "Make sure the fortune server is running, "
                                     "and check that the host name and port "
                                     "settings are correct."));
         break;
     default:
-        m_msgList.append(tr("The following error occurred: %1.")
+        setLogMsg(tr("The following error occurred: %1.")
                                  .arg(m_tcpSocket->errorString()));
     }
-
-    setErrorMsg(m_msgList.join("\n"));
 }
 
 void PRConnection::sessionOpened()
@@ -150,12 +146,11 @@ void PRConnection::sessionOpened()
     qDebug("Seession is Opened");
 }
 
-void PRConnection::setErrorMsg(QString arg)
+void PRConnection::setLogMsg(QString arg)
 {
-    if (m_logMsg != arg) {
-        m_logMsg = arg;
-        emit errorMsgChanged(arg);
-    }
+    m_msgList.push_front(arg + '\n');
+    m_logMsg = m_msgList.join("\n");
+    emit logMsgChanged(arg);
 }
 
 void PRConnection::setSendEnable(bool arg)
@@ -164,4 +159,23 @@ void PRConnection::setSendEnable(bool arg)
         m_sendEnable = arg;
         emit sendEnableChanged(arg);
     }
+}
+
+void PRConnection::sendMessage(QString msg)
+{
+    qDebug("Send");
+
+//    QByteArray block;
+//    QDataStream out(&block, QIODevice::WriteOnly);
+//    out.setVersion(QDataStream::Qt_4_0);
+//    out << (quint16)0;
+//    out << msg;
+//    out.device()->seek(0);
+//    out << (quint16)(block.size() - sizeof(quint16));
+
+//    const char *data = msg.toStdString().c_str();
+    int count = m_tcpSocket->write(msg.toLatin1());
+    m_tcpSocket->waitForBytesWritten(-1);
+//    if (m_tcpSocket->flush())
+        setLogMsg("Message: " + msg + "(sent " + QString(count) + " byte)");
 }

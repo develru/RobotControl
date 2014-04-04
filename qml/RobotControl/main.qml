@@ -46,16 +46,29 @@ ApplicationWindow {
                 text: qsTr("Send")
                 enabled: con.sendEnable
                 Layout.fillWidth: true
-//                onClicked: con.readData();
+                onClicked: con.sendMessage(tf_message.text);
             }
         }
 
-        ColumnLayout {
-            TextArea {
+        GridLayout {
+            rows: 2
+            columns: 2
+            //flow: GridLayout.TopToBottom
+//            anchors.fill: parent
+            Label {
+                text: "Message"
                 Layout.fillWidth: true
-                Layout.fillHeight: true
-                text: con.logMsg
             }
+            TextField {
+                id: tf_message
+                Layout.fillWidth: true
+            }
+                TextArea {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.columnSpan: 2
+                    text: con.logMsg
+                }
         }
     }
 }
