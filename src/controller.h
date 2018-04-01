@@ -3,6 +3,10 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#include <QtNetwork/QTcpSocket>
+#include <QtCore/QDataStream>
+
+class QNetworkSession;
 
 namespace robot {
 
@@ -13,9 +17,16 @@ public:
     explicit Controller(QObject *parent = 0);
     ~Controller();
 
-    Q_INVOKABLE void connect(const QString ip, const QString port);
+    Q_INVOKABLE void connectToRobot(const QString ip, const QString port);
+private slots:
+    void sessionOpened();
+    void displayError(QAbstractSocket::SocketError socketError);
+    void readMessage();
 private:
-    
+    QTcpSocket *tcpSocket = nullptr;
+    QDataStream in;
+    QNetworkSession *networkSession = nullptr;
+
 };
 
 }

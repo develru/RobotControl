@@ -15,6 +15,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Quick REQUIRED)
 find_package(Qt5QuickControls2 REQUIRED)
+find_package(Qt5Network REQUIRED)
 
 
 if(CMAKE_BUILD_TYPE STREQUAL "")
@@ -35,4 +36,4 @@ file(GLOB_RECURSE RSRCS ${PROJECT_SOURCE_DIR}/src/*.qrc)
 aux_source_directory(. SRC_LIST)
 add_executable(${PROJECT_NAME} ${SRC_LIST} ${HDRS} ${SRCS} ${RSRCS})
 
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets Qt5::Quick Qt5::QuickControls2)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets Qt5::Quick Qt5::QuickControls2 Qt5::Network)
