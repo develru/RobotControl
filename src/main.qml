@@ -15,7 +15,7 @@ ApplicationWindow {
     header: ToolBar {
         Material.background: Material.BlueGrey
         ToolButton {
-            Material.foreground: Material.DeepOrange
+            Material.foreground: Material.Brown
             height: parent.height
             anchors.right: parent.right
             text: qsTr("Quit")
@@ -31,22 +31,29 @@ ApplicationWindow {
         initialItem: Item {
             width: parent.width
             height: parent.height
-
-            Column {
-                spacing: 15
+            Page {
                 anchors.centerIn: parent
-                Label {
-                    text: qsTr("IP address:")
+                header: Label {
+                    padding: 10
+                    text: qsTr("Conect to the robot")
+                    font.pixelSize: 20
                 }
-                TextField {
-                    id: "ipAddress"
-                }
-                Label { text: qsTr("port") }
-                TextField { id: port }
-                Button {
-                    text: qsTr("Connect")
-                    Material.background: Material.DeepOrange
-                    anchors.right: parent.right
+                Column {
+                    spacing: 15
+                    anchors.centerIn: parent
+                    Label {
+                        text: qsTr("IP address:")
+                    }
+                    TextField {
+                        id: "ipAddress"
+                    }
+                    Label { text: qsTr("port") }
+                    TextField { id: port }
+                    Button {
+                        text: qsTr("Connect")
+                        Material.background: Material.DeepOrange
+                        anchors.right: parent.right
+                    }
                 }
             }
         }
