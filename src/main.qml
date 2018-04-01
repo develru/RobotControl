@@ -1,18 +1,21 @@
 import QtQuick 2.6
 import QtQuick.Controls 2.1
+import QtQuick.Controls.Material 2.1
 
 ApplicationWindow {
     visible: true
+
+    Material.theme: Material.Dark
+    Material.accent: Material.DeepOrange
 
     width: 1024
     height: 680
     title: qsTr("Robot Control Center")
 
     header: ToolBar {
-        // Label{
-        //     text: "Test"
-        // }
+        Material.background: Material.BlueGrey
         ToolButton {
+            Material.foreground: Material.DeepOrange
             height: parent.height
             anchors.right: parent.right
             text: qsTr("Quit")
@@ -31,8 +34,19 @@ ApplicationWindow {
 
             Column {
                 spacing: 15
+                anchors.centerIn: parent
+                Label {
+                    text: qsTr("IP address:")
+                }
+                TextField {
+                    id: "ipAddress"
+                }
+                Label { text: qsTr("port") }
+                TextField { id: port }
                 Button {
                     text: qsTr("Connect")
+                    Material.background: Material.DeepOrange
+                    anchors.right: parent.right
                 }
             }
         }
