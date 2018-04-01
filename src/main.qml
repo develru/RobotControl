@@ -53,6 +53,7 @@ ApplicationWindow {
                         text: qsTr("Connect")
                         Material.background: Material.DeepOrange
                         anchors.right: parent.right
+                        onClicked: controller.connect(ipAddress.text, port.text)
                     }
                 }
             }
