@@ -14,6 +14,12 @@ ApplicationWindow {
 
     header: ToolBar {
         Material.background: Material.BlueGrey
+        Label {
+            id: toolBarText
+            text: qsTr("Connect to the robot")
+            font.pixelSize: 20
+            anchors.centerIn: parent
+        }
         ToolButton {
             Material.foreground: Material.Brown
             height: parent.height
@@ -57,7 +63,10 @@ ApplicationWindow {
                         text: qsTr("Connect")
                         Material.background: Material.DeepOrange
                         anchors.right: parent.right
-                        onClicked: stackView.push("qrc:/qml/controlpanel.qml") //controller.connectToRobot(ipAddress.text, port.text)
+                        onClicked: {
+                            toolBarText.text = qsTr("Control Panel")
+                            stackView.push("qrc:/qml/controlpanel.qml") //controller.connectToRobot(ipAddress.text, port.text)
+                        }
                     }
                 }
             }
