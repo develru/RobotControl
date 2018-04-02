@@ -49,15 +49,15 @@ ApplicationWindow {
                         text: "192.168.0.10"
                     }
                     Label { text: qsTr("port") }
-                    TextField { 
-                        id: port 
+                    TextField {
+                        id: port
                         text: "9999"
                     }
                     Button {
                         text: qsTr("Connect")
                         Material.background: Material.DeepOrange
                         anchors.right: parent.right
-                        onClicked: controller.connectToRobot(ipAddress.text, port.text)
+                        onClicked: stackView.push("qrc:/qml/controlpanel.qml") //controller.connectToRobot(ipAddress.text, port.text)
                     }
                 }
             }
