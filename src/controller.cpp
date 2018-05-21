@@ -7,7 +7,7 @@
 
 using namespace robot;
 
-Controller::Controller(QObject *parent) : 
+Controller::Controller(QObject *parent) :
     QObject(parent),
     tcpSocket(new QTcpSocket(this))
 {
@@ -51,6 +51,14 @@ void Controller::connectToRobot(const QString ip, const QString port)
     tcpSocket->connectToHost(ip, port.toInt());
 }
 
+void Controller::sendCommand(const QString cmd)
+{
+    qDebug("Send");
+
+    int count = tcpSocket->write(cmd.toLatin1());
+    tcpSocket->waitForBytesWritten(-1);
+    qDebug() << "Message: " << cmd << "(sent " << count << " byte)";
+}
 void Controller::sessionOpened()
 {
     // Save the used configuration

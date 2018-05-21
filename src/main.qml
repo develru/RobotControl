@@ -48,11 +48,11 @@ ApplicationWindow {
                     spacing: 15
                     anchors.centerIn: parent
                     Label {
-                        text: qsTr("IP address:")
+                        text: qsTr("IP address or Name:")
                     }
                     TextField {
                         id: "ipAddress"
-                        text: "192.168.0.10"
+                        text: "robotpi"
                     }
                     Label { text: qsTr("port") }
                     TextField {
@@ -65,7 +65,8 @@ ApplicationWindow {
                         anchors.right: parent.right
                         onClicked: {
                             toolBarText.text = qsTr("Control Panel")
-                            stackView.push("qrc:/qml/controlpanel.qml") //controller.connectToRobot(ipAddress.text, port.text)
+                            stackView.push("qrc:/qml/controlpanel.qml")
+                            controller.connectToRobot(ipAddress.text, port.text)
                         }
                     }
                 }

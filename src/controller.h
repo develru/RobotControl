@@ -18,6 +18,7 @@ public:
     ~Controller();
 
     Q_INVOKABLE void connectToRobot(const QString ip, const QString port);
+    Q_INVOKABLE void sendCommand(const QString cmd);
 private slots:
     void sessionOpened();
     void displayError(QAbstractSocket::SocketError socketError);
